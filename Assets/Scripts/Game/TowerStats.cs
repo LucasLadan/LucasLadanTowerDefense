@@ -1,0 +1,17 @@
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "TowerStats", menuName = "Scriptable Objects/TowerStats")]
+public class TowerStats : ScriptableObject
+{
+    public int _health;
+    public float _fireRate;
+    public int _cost;
+    public Bullet _bullet;
+    public TowerType _type;
+
+    public enum TowerType
+    {
+        shoot,produce,wall
+    }
+
+}
