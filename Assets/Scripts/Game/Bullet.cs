@@ -7,14 +7,21 @@ public class Bullet : MonoBehaviour
     [SerializeField] private int _pierce;
     [SerializeField] private int _lifespan;
     [SerializeField] private float _speed;
+
+    private Rigidbody2D _rigidbody;
     private void Awake()
     {
-        
+        _rigidbody = GetComponent<Rigidbody2D>();
+        if ( _rigidbody != null )
+        {
+            _rigidbody.linearVelocity = new Vector2(1 * _speed, 0);
+        }
     }
 
     IEnumerator DoLifeSpan()
     {
         yield return new WaitForSeconds(_lifespan);
+        Destroy(gameObject);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

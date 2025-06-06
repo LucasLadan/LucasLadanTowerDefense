@@ -7,7 +7,7 @@ public class GameplayState : MonoBehaviour
 {
     [SerializeField] private StateManager _stateManager;
     [SerializeField] private LevelInfo _levelInfo;
-    private int _points = 0;
+    private float _points = 0;
     private int _totalKills = 0;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -16,11 +16,15 @@ public class GameplayState : MonoBehaviour
         _stateManager.UpdateGameState.AddListener(UpdateState);
     }
 
+    private void Update()
+    {
+        SpawnEnemy();
+    }
 
-    public void EnemyKilled(int cost)
+    public void EnemyKilled(float cost)
     {
         _totalKills += 1;
-        _points += (int)(math.round(cost / 2)+1);
+        _points += (cost / 2)+1;
     }
 
     public void LevelPicked(LevelInfo _newInfo)
@@ -33,27 +37,34 @@ public class GameplayState : MonoBehaviour
     {
         if (gameState == StateManager.GameState.gameplay)
         {
-            _points = 0;
+            _points = 2;
             _totalKills = 0;
         }
     }
 
     private void SpawnEnemy()
     {
-        Enemy SelectedEnemy = _levelInfo.enemies[0];
-        for (int i = 0; i < _levelInfo.enemies.Count; i++)
+        if (_points > 0)
         {
-            if (_levelInfo.enemies[i].GetCost() <= _points)
+            Enemy SelectedEnemy = _levelInfo.enemies[0];
+            for (int i = 0; i < _levelInfo.enemies.Count; i++)
             {
-                if (SelectedEnemy.GetCost() < _levelInfo.enemies[i].GetCost())
+                if (_levelInfo.enemies[i].GetCost() <= _points)
                 {
-                    SelectedEnemy = _levelInfo.enemies[i];
-                }
-                else if (SelectedEnemy.GetCost() == _levelInfo.enemies[i].GetCost() && UnityEngine.Random.Range(1,2) == 2)
-                {
-                    SelectedEnemy = _levelInfo.enemies[i];
+                    if (SelectedEnemy.GetCost() < _levelInfo.enemies[i].GetCost())
+                    {
+                        SelectedEnemy = _levelInfo.enemies[i];
+                    }
+                    else if (SelectedEnemy.GetCost() == _levelInfo.enemies[i].GetCost() && UnityEngine.Random.Range(1, 2) == 2)
+                    {
+                        SelectedEnemy = _levelInfo.enemies[i];
+                    }
                 }
             }
+
+            Instantiate(SelectedEnemy.gameObject, new Vector2(12, UnityEngine.Random.Range(-3, 1)), new Quaternion(0, 0, 0, 0));
+            _points -= SelectedEnemy.GetCost();
+            Debug.Log("Spawned");
         }
     }
 }

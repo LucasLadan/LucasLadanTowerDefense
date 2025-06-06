@@ -8,10 +8,11 @@ public class TowerStats : ScriptableObject
     public int _cost;
     public Bullet _bullet;
     public TowerType _type;
+    public Sprite _sprite;
 
     public enum TowerType
     {
-        shoot,produce,wall
+        shoot,produce,wall,instant
     }
 
 }
