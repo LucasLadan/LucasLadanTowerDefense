@@ -11,5 +11,7 @@ public interface ITowerFunctions
     
     public TowerStats GetTowerStats();
 
+    public void TakeDamage(int damage);
+
     IEnumerator ReloadTime();
 }

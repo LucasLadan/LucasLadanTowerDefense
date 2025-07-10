@@ -13,7 +13,10 @@ MonoBehaviour:
   m_Name: Producer
   m_EditorClassIdentifier: 
   _health: 7
-  _fireRate: 10
+  _fireRate: 20
   _cost: 10
-  _bullet: {fileID: 0}
+  _range: 0
+  _checkTime: 20
+  _bullet: {fileID: 1597350753924085103, guid: 3be7f858587ad6b47bc1bcec6b272256, type: 3}
   _type: 1
+  _sprite: {fileID: 499951696, guid: 63fba3c427746114ea9033cab3c29c43, type: 3}

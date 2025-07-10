@@ -8,23 +8,46 @@ public class TowerUI : MonoBehaviour
     [SerializeField] private GameObject _tower;
     private Toggle _toggle;
     private TowerManager _towerManager;
+    private bool doSwitch;
 
     [SerializeField] private Image _sprite;
     [SerializeField] private TextMeshProUGUI _price;
 
     private void Start()
     {
-        
+        doSwitch = true;
         _toggle = GetComponent<Toggle>();
         _towerManager = FindFirstObjectByType<TowerManager>();
+        _towerManager.towerChanged.AddListener(TowerSwitch);
+    }
+
+    public void TowerSwitch()
+    {
+        if (doSwitch)
+        {
+            _sprite.color = Color.white;
+            _toggle.isOn = false;
+        }
+        else
+        {
+            doSwitch = true;
+        }
     }
 
     public void Toggled(bool isOn)
     {
-        if (_towerManager.PickedTower(_tower, isOn))
+        if (isOn)
         {
-            //_toggle.isOn = false;
+            _sprite.color = Color.gray;
+            doSwitch = false;
+            _towerManager.PickedTower(_tower, isOn);
         }
+        else
+        {
+            _sprite.color = Color.white;
+        }
+
+        
     }
 
     public bool SetTower(GameObject _newTower)

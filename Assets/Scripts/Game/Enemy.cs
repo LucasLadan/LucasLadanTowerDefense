@@ -10,14 +10,15 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] private int _health;
     [SerializeField] private float _speed;
+    [SerializeField] private int _damage;
+    private bool _isAttacking;
+    private bool _isWaveZombie = false;
     private float _speedMult = 1;
     [SerializeField] private float _attackSpeed;
-    [SerializeField] private bool isStalling = true;
     [SerializeField] private float cost;
 
-    private float _stallTimer = 60f;
 
-    private void Awake()
+    virtual public void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         _stateManager = FindFirstObjectByType<StateManager>();
@@ -33,29 +34,47 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    virtual public void OnBulletHit(Bullet bullet)
+    {
+        _health -= bullet.GetDamage();
+        if (bullet.GetDamage() > 0)
+        {
+            if (_health < 0)
+            {
+                _gameplayState.EnemyKilled(cost,_isWaveZombie);
+                Destroy(gameObject);
+                return;
+            }
+        }
+    }
+
+    virtual public void OnTowerTriggered(ITowerFunctions towerFunctions)
+    {
+        _speedMult = 0;
+        StartCoroutine(DoDamage(towerFunctions));
+    }
+
+    virtual public IEnumerator DoDamage(ITowerFunctions towerFunctions)
+    {
+        while (_isAttacking)
+        {
+            yield return new WaitForSeconds(_attackSpeed);
+            towerFunctions.TakeDamage(_damage);
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Bullet bullet = collision.gameObject.GetComponent<Bullet>();
         if (bullet != null)
         {
-            
-            _health -= bullet.GetDamage();
-            if (bullet.GetDamage() > 0)
-            {
-                _stallTimer = 60f;
-                if (_health < 0)
-                {
-                    _stateManager.UpdateGameState.RemoveListener(StateChanged);
-                    _gameplayState.EnemyKilled(cost);
-                    Destroy(gameObject);
-                    return;
-                }
-            }
+            OnBulletHit(bullet);            
         }
         ITowerFunctions towerFunctions = collision.gameObject.GetComponent<ITowerFunctions>();
-        if (towerFunctions != null )
+        if (towerFunctions != null)
         {
-            _speedMult = 0;
+            _isAttacking = true;
+            OnTowerTriggered(towerFunctions);
         }
     }
 
@@ -65,22 +84,18 @@ public class Enemy : MonoBehaviour
         if (towerFunctions != null)
         {
             _speedMult = 1;
+            _isAttacking = false;
         }
     }
 
-    IEnumerator StallAvoidance()
+    private void OnDestroy()
     {
-        yield return new WaitForSeconds(_stallTimer);
-        if (isStalling)
-        {
-            _speed *= 2;
-            _attackSpeed /= 5;
-        }
+        _stateManager.UpdateGameState.RemoveListener(StateChanged);
     }
 
     private void Update()
     {
-        _rigidbody.linearVelocity = new Vector2(_speed * _speedMult * -1,0);
+        _rigidbody.linearVelocity = new Vector2(_speed/10 * _speedMult * -1,0);
     }
 
     private void StateChanged(StateManager.GameState gameState)
@@ -93,4 +108,16 @@ public class Enemy : MonoBehaviour
 
     public float GetCost()
     { return cost; }
+
+    public void SetIsWaveZombie(bool newBool)
+    { _isWaveZombie = newBool; }
+
+    public void SetSpeedMult(float speedMult)
+    {  _speedMult = speedMult; }
+
+    public void ChangeHealth(int damage)
+    { _health -= damage; }
+
+    public int GetHealth()
+    { return _health; }
 }

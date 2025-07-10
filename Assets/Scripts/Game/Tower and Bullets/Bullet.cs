@@ -5,7 +5,7 @@ public class Bullet : MonoBehaviour
 {
     [SerializeField] private int _damage;
     [SerializeField] private int _pierce;
-    [SerializeField] private int _lifespan;
+    [SerializeField] private float _lifespan;
     [SerializeField] private float _speed;
 
     private Rigidbody2D _rigidbody;
@@ -16,6 +16,7 @@ public class Bullet : MonoBehaviour
         {
             _rigidbody.linearVelocity = new Vector2(1 * _speed, 0);
         }
+        StartCoroutine(DoLifeSpan());
     }
 
     IEnumerator DoLifeSpan()
@@ -24,7 +25,7 @@ public class Bullet : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    virtual public void OnTriggerEnter2D(Collider2D collision)
     {
         Enemy _enemy = collision.gameObject.GetComponent<Enemy>();
         if (_enemy != null)

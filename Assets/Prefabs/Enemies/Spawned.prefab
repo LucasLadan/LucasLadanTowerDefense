@@ -10,11 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4788512845355869193}
   - component: {fileID: 1120692718340631935}
-  - component: {fileID: 1198221791057591023}
   - component: {fileID: 7946008509548748583}
   - component: {fileID: 3321266695239010233}
+  - component: {fileID: -3609486097230287721}
   m_Layer: 3
-  m_Name: Enemy
+  m_Name: Spawned
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -80,7 +80,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 11
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0, g: 0.39235067, b: 1, a: 1}
+  m_Color: {r: 0, g: 1, b: 0.054832935, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -90,23 +90,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1198221791057591023
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2695679699592331786}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d8c70bea4c2daa4b8ff74b270b431f3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _health: 7
-  _speed: 10
-  _damage: 1
-  _attackSpeed: 1
-  cost: 1
 --- !u!61 &7946008509548748583
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -180,3 +163,20 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 6
+--- !u!114 &-3609486097230287721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2695679699592331786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a40e184faf1e7cf4ab9fc157aa0e978a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _health: 4
+  _speed: 7
+  _damage: 1
+  _attackSpeed: 1.5
+  cost: 0
